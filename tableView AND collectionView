@@ -1,0 +1,13 @@
+UICollectionView 和UITableView的差异性：
+
+1. 界面结构：
+   1.1. tableView 的界面结构通常由：tableViewCell 和headerSectionView 构成
+        tableViewCell：-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+        headerSectionView：-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+
+   1.2. collectionView 的界面结构通常由：collectionCell 和 supplementaryView（辅助的） 构成
+        collectionCell : - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+        supplementaryView: - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+        其中supplementaryView 分为：UICollectionElementKindSectionHeader 和UICollectionElementKindSectionFooter 
+2.样式Size
+    2.1 tableView：
