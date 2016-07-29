@@ -1,13 +1,47 @@
 UICollectionView 和UITableView的差异性：
 
-1. 界面结构：
-   1.1. tableView 的界面结构通常由：tableViewCell 和headerSectionView 构成
-        tableViewCell：-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-        headerSectionView：-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-
-   1.2. collectionView 的界面结构通常由：collectionCell 和 supplementaryView（辅助的） 构成
-        collectionCell : - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-        supplementaryView: - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+1. 界面结构&初始化方法：
+   1.1. tableView 的界面结构通常由：tableViewCell 和headerSectionView/footerSectionView 构成
+        tableViewCell：cellForRowAtIndexPath
+        headerSectionView：viewForHeaderInSection
+        footerSectionView：viewForFooterInSection
+         
+        willDisplayCell
+       ............header
+         
+   1.2. collectionView 的界面结构通常由：collectionCell 和 supplementaryView（辅助的-header和footer） 构成
+        collectionCell : cellForItemAtIndexPath
+        supplementaryView: - (UICollectionReusableView *)viewForSupplementaryElementOfKind:(NSString *)kind
         其中supplementaryView 分为：UICollectionElementKindSectionHeader 和UICollectionElementKindSectionFooter 
+        willDisplayCell
+  
+  
+  小结：  界面元素构成相同,collectionView 把 header和footer的初始化方法合二为一，并且后者采用了自定义特殊
+         视图UICollectionReusableView<继承自UIView>，而不是普通的UIView ;   willDisplayCell 可以用来加载数据，优化点之一
+  
+  
 2.样式Size
-    2.1 tableView：
+    2.1 tableView：heightForRowAtIndexPath      //cell 大小
+                   heightForHeaderInSection   //headerSection 大小
+                   heightForFooterInSection   //footerSection 大小
+                   -----------------------------------------------------
+                   estimatedHeightForRowAtIndexPath
+                    ............header ............
+                    ............Footer ............
+    
+    2.2 collectionView： sizeForItemAtIndexPath        //cell 大小
+                         referenceSizeForHeaderInSection // supplementaryView
+                         referenceSizeForFooterInSection // supplementaryView
+                         -------------------------------------------------
+                         insetForSectionAtIndex          // cell 和 collectionView 四周边框的margin 只对边缘上的cell 有效
+                         minimumLineSpacingForSectionAtIndex // cell 间的  上下距离
+                         minimumInteritemSpacingForSectionAtIndex // cell 间的  左右距离
+                         
+                         
+   小结：tableView 有预设(estimated)高度方法，后者没有；后者具有一些间距的设置方法
+   
+   
+   交互效果：tableView 的Section视图 可以滑动的时候停留，但collectionView 不可以-这才是以上的重点，所以更加需求选择不同控件很关键
+   
+   
+   
